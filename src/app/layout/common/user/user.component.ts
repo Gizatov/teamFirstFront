@@ -4,6 +4,8 @@ import { BooleanInput } from '@angular/cdk/coercion';
 import { Subject, takeUntil } from 'rxjs';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
+import {AppConfig, Scheme} from "../../../core/config/app.config";
+import {FuseConfigService} from "../../../../@fuse/services/config";
 
 @Component({
     selector       : 'user',
@@ -20,6 +22,7 @@ export class UserComponent implements OnInit, OnDestroy
 
     @Input() showAvatar: boolean = true;
     user: User;
+    config: AppConfig;
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -29,7 +32,8 @@ export class UserComponent implements OnInit, OnDestroy
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
-        private _userService: UserService
+        private _userService: UserService,
+        private _fuseConfigService: FuseConfigService
     )
     {
     }
@@ -51,6 +55,14 @@ export class UserComponent implements OnInit, OnDestroy
 
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
+            });
+
+        this._fuseConfigService.config$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((config: AppConfig) => {
+
+                // Store the config
+                this.config = config;
             });
     }
 
@@ -94,5 +106,10 @@ export class UserComponent implements OnInit, OnDestroy
     signOut(): void
     {
         this._router.navigate(['/sign-out']);
+    }
+
+    setScheme(scheme: Scheme): void
+    {
+        this._fuseConfigService.config = {scheme};
     }
 }

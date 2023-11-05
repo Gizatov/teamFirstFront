@@ -1,9 +1,61 @@
-.mat-mdc-row .mat-mdc-cell {
-  border-bottom: 1px solid transparent;
-  border-top: 1px solid transparent;
+.mat-row .mat-cell {
   cursor: pointer;
 }
 
-.mat-mdc-row:hover .mat-mdc-cell {
-  border-color: currentColor;
+.table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+th:after,
+th:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+
+th:after {
+  bottom: -1px;
+}
+
+th.mat-header-cell, td.mat-cell {
+  @apply border-r px-2;
+}
+
+.filter-col ::ng-deep .mat-form-field-wrapper {
+  margin-bottom: 8px !important;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+::-webkit-scrollbar:hover {
+  width: 12px;
+  height: 12px;
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 20px;
+  box-shadow: inset 0 0 0 20px rgba(0, 0, 0, 0.24);
+}
+
+::-webkit-scrollbar-thumb:active {
+  border-radius: 20px;
+  box-shadow: inset 0 0 0 20px rgba(0, 0, 0, 0.37);
+}
+
+.dark{
+  ::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 0 20px rgba(255, 255, 255, 0.24);
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    box-shadow: inset 0 0 0 20px rgba(255, 255, 255, 0.37);
+  }
 }

@@ -7,6 +7,9 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatInputModule} from "@angular/material/input";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatListModule} from "@angular/material/list";
 
 
 @NgModule({
@@ -19,7 +22,10 @@ import {MatInputModule} from "@angular/material/input";
         MatIconModule,
         MatTableModule,
         MatPaginatorModule,
-        MatInputModule
+        MatInputModule,
+        MatProgressBarModule,
+        MatProgressSpinnerModule,
+        MatListModule
     ]
 })
 export class MainModule { }

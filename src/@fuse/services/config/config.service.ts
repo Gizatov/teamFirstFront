@@ -15,6 +15,11 @@ export class FuseConfigService
      */
     constructor(@Inject(FUSE_APP_CONFIG) config: any)
     {
+        const scheme = localStorage.getItem("scheme");
+        if (['light', 'dark', 'auto'].includes(scheme)) {
+            config.scheme = scheme;
+        }
+
         // Private
         this._config = new BehaviorSubject(config);
     }
@@ -28,6 +33,10 @@ export class FuseConfigService
      */
     set config(value: any)
     {
+        if (['light', 'dark', 'auto'].includes(value?.scheme)) {
+            localStorage.setItem("scheme", value.scheme);
+        }
+
         // Merge the new config over to the current config
         const config = merge({}, this._config.getValue(), value);
 
