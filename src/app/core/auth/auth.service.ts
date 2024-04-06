@@ -3,11 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
+import {User} from "../user/user.types";
 
 @Injectable()
 export class AuthService
 {
     private _authenticated: boolean = false;
+    private register = 'http://localhost:8070/auth/register';
+    private auth = 'http://localhost:8070/auth/authenticate';
+    private getById = 'http://localhost:8070/users/';
+
+
 
     /**
      * Constructor
@@ -29,6 +35,17 @@ export class AuthService
     set accessToken(token: string)
     {
         localStorage.setItem('accessToken', token);
+
+    }
+    set email(email: string)
+    {
+        localStorage.setItem('email', email);
+
+    }
+    set role(role: string)
+    {
+        localStorage.setItem('role', role);
+
     }
 
     get accessToken(): string
@@ -73,11 +90,16 @@ export class AuthService
             return throwError('User is already logged in.');
         }
 
-        return this._httpClient.post('api/auth/sign-in', credentials).pipe(
+        return this._httpClient.post(this.auth, credentials).pipe(
             switchMap((response: any) => {
 
                 // Store the access token in the local storage
-                this.accessToken = response.accessToken;
+
+                this.accessToken = response.token;
+                this.email = response.email;
+                this.role = response.role;
+
+                console.log('accessToken',this.accessToken)
 
                 // Set the authenticated flag to true
                 this._authenticated = true;
@@ -117,7 +139,10 @@ export class AuthService
                 if ( response.accessToken )
                 {
                     this.accessToken = response.accessToken;
+                    this.email = response.email;
+                    this.role = response.role;
                 }
+
 
                 // Set the authenticated flag to true
                 this._authenticated = true;
@@ -151,10 +176,12 @@ export class AuthService
      *
      * @param user
      */
-    signUp(user: { name: string; email: string; password: string; company: string }): Observable<any>
-    {
-        return this._httpClient.post('api/auth/sign-up', user);
+    signUp(user: { name: string; lastName: string; email: string; password: string; gender: string, role: { id: string } }): Observable<any> {
+        console.log('this._httpClient.post(this.url, user)', this._httpClient.post(this.register, user));
+        return this._httpClient.post(this.register, user);
     }
+
+
 
     /**
      * Unlock session
@@ -191,5 +218,13 @@ export class AuthService
 
         // If the access token exists and it didn't expire, sign in using it
         return this.signInUsingToken();
+    }
+
+    getUserById(userId: string): Observable<User> {
+        return this._httpClient.get<User>(`http://localhost:8070/users/${userId}`); // Предполагается, что у вас есть роутер API для получения пользователя по его идентификатору
+    }
+
+    updateUser(user: User): Observable<User> {
+        return this._httpClient.post<User>(`http://localhost:8070/users/${user.id}`, user);
     }
 }

@@ -5,8 +5,11 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 @Injectable({
     providedIn: 'root'
 })
+
+
 export class AnalyticsService
 {
+    private baseUrl = 'http://localhost:8070';
     private _data: BehaviorSubject<any> = new BehaviorSubject(null);
 
     /**
@@ -42,5 +45,9 @@ export class AnalyticsService
                 this._data.next(response);
             })
         );
+    }
+    getStatistics(): Observable<any> {
+        const url = `${this.baseUrl}/student/statistics`;
+        return this._httpClient.get<any>(url);
     }
 }

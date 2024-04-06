@@ -19,6 +19,11 @@ export class AcademyService
     constructor(private _httpClient: HttpClient)
     {
     }
+    private url = 'http://localhost:8070/users/candidates';
+    private urlCandidate = 'http://localhost:8070/users/candidate';
+    private urlFinal = 'http://localhost:8070/users/result'
+
+    private urlStudent = 'http://localhost:8070/student';
 
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors
@@ -100,5 +105,22 @@ export class AcademyService
                 return of(course);
             })
         );
+    }
+
+    getAllCandidates(): Observable<any>{
+        return this._httpClient.get<any>(this.url);
+    }
+    getChoiceCandidates(): Observable<any>{
+        return this._httpClient.get<any>(this.urlCandidate);
+    }
+    voteForCandidate(candidateId: number): Observable<any> {
+        return this._httpClient.post<any>(`${this.urlStudent}/vote/${candidateId}`, null);
+    }
+    checkIfCurrentUserExists(): Observable<any> {
+        return this._httpClient.get<any>(`${this.urlStudent}/currentUserExists`);
+    }
+
+    getFinalResult() : Observable<any>{
+        return this._httpClient.get<any>(this.urlFinal)
     }
 }

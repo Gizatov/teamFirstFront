@@ -4,6 +4,7 @@ import { NoAuthGuard } from 'app/core/auth/guards/noAuth.guard';
 import { LayoutComponent } from 'app/layout/layout.component';
 import { InitialDataResolver } from 'app/app.resolvers';
 import {MainModule} from "./modules/admin/main/main.module";
+import {EditUserComponent} from "./modules/admin/pages/edit-user.component/edit-user.component";
 
 // @formatter:off
 /* eslint-disable max-len */
@@ -84,7 +85,6 @@ export const appRoutes: Route[] = [
                 {path: 'project', loadChildren: () => import('app/modules/admin/dashboards/project/project.module').then(m => m.ProjectModule)},
                 {path: 'analytics', loadChildren: () => import('app/modules/admin/dashboards/analytics/analytics.module').then(m => m.AnalyticsModule)},
                 {path: 'finance', loadChildren: () => import('app/modules/admin/dashboards/finance/finance.module').then(m => m.FinanceModule)},
-                {path: 'crypto', loadChildren: () => import('app/modules/admin/dashboards/crypto/crypto.module').then(m => m.CryptoModule)},
             ]},
 
             // Apps

@@ -10,6 +10,8 @@ import {MatInputModule} from "@angular/material/input";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatListModule} from "@angular/material/list";
+import {EditUserComponent} from "../pages/edit-user.component/edit-user.component";
+import {MatButtonModule} from "@angular/material/button";
 
 
 @NgModule({
@@ -25,7 +27,8 @@ import {MatListModule} from "@angular/material/list";
         MatInputModule,
         MatProgressBarModule,
         MatProgressSpinnerModule,
-        MatListModule
+        MatListModule,
+        MatButtonModule
     ]
 })
 export class MainModule { }

@@ -11,12 +11,13 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { SharedModule } from 'app/shared/shared.module';
 import { FinanceComponent } from 'app/modules/admin/dashboards/finance/finance.component';
 import { financeRoutes } from 'app/modules/admin/dashboards/finance/finance.routing';
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 @NgModule({
     declarations: [
         FinanceComponent
     ],
-    imports     : [
+    imports: [
         RouterModule.forChild(financeRoutes),
         MatButtonModule,
         MatDividerModule,
@@ -26,7 +27,8 @@ import { financeRoutes } from 'app/modules/admin/dashboards/finance/finance.rout
         MatSortModule,
         MatTableModule,
         NgApexchartsModule,
-        SharedModule
+        SharedModule,
+        MatPaginatorModule
     ]
 })
 export class FinanceModule

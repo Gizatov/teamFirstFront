@@ -1,0 +1,129 @@
+<form
+        class="mt-8"
+        [formGroup]="signUpForm"
+        #signUpNgForm="ngForm">
+  <h2>Add User</h2>
+
+  <!-- Name field -->
+  <mat-form-field class="w-full">
+    <mat-label>Full name</mat-label>
+    <input
+            id="name"
+            matInput
+            [formControlName]="'name'">
+    <mat-error *ngIf="signUpForm.get('name').hasError('required')">
+      Full name is required
+    </mat-error>
+  </mat-form-field>
+  <!-- LastName field -->
+  <mat-form-field class="w-full">
+    <mat-label>Full lastname</mat-label>
+    <input
+            id="lastName"
+            matInput
+            [formControlName]="'lastName'"> <!-- Заменено на 'lastName' -->
+    <mat-error *ngIf="signUpForm.get('lastName').hasError('required')">
+      Full lastname is required
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Email field -->
+  <mat-form-field class="w-full">
+    <mat-label>Email address</mat-label>
+    <input
+            id="email"
+            matInput
+            [formControlName]="'email'">
+    <mat-error *ngIf="signUpForm.get('email').hasError('required')">
+      Email address is required
+    </mat-error>
+    <mat-error *ngIf="signUpForm.get('email').hasError('email')">
+      Please enter a valid email address
+    </mat-error>
+  </mat-form-field>
+  <!-- Password field -->
+  <mat-form-field class="w-full">
+    <mat-label>Password</mat-label>
+    <input
+            id="password"
+            matInput
+            type="password"
+            [formControlName]="'password'"
+            #passwordField>
+    <button
+            mat-icon-button
+            type="button"
+            (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+            matSuffix>
+      <mat-icon
+              class="icon-size-5"
+              *ngIf="passwordField.type === 'password'"
+              [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+      <mat-icon
+              class="icon-size-5"
+              *ngIf="passwordField.type === 'text'"
+              [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+    </button>
+    <mat-error *ngIf="signUpForm.get('password').hasError('required')">
+      Password is required
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Gender field -->
+  <mat-form-field class="w-full">
+    <mat-label>Gender</mat-label>
+    <mat-select formControlName="gender">
+      <mat-option value="male">Male</mat-option>
+      <mat-option value="female">Female</mat-option>
+      <mat-option value="other">Other</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <!-- Role field -->
+  <mat-form-field class="w-full">
+    <mat-label>Role</mat-label>
+    <mat-select formControlName="role">
+      <mat-option value="1">Админ</mat-option>
+      <mat-option value="2">Кандидат</mat-option>
+      <mat-option value="3">Студент</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <!--                &lt;!&ndash; ToS and PP &ndash;&gt;-->
+  <!--                <div class="inline-flex items-end w-full mt-1.5">-->
+  <!--                    <mat-checkbox-->
+  <!--                            [color]="'primary'"-->
+  <!--                            [formControlName]="'agreements'">-->
+  <!--                        <span>I agree to the</span>-->
+  <!--                        <a-->
+  <!--                                class="ml-1 text-primary-500 hover:underline"-->
+  <!--                                [routerLink]="['./']">Terms of Service-->
+  <!--                        </a>-->
+  <!--                        <span>and</span>-->
+  <!--                        <a-->
+  <!--                                class="ml-1 text-primary-500 hover:underline"-->
+  <!--                                [routerLink]="['./']">Privacy Policy-->
+  <!--                        </a>-->
+  <!--                    </mat-checkbox>-->
+  <!--                </div>-->
+
+  <!-- Submit button -->
+  <button
+          class="fuse-mat-button-large w-full mt-6"
+          mat-flat-button
+          [color]="'primary'"
+          [disabled]="signUpForm.disabled"
+          (click)="onSignUp()">
+                        <span *ngIf="!signUpForm.disabled">
+                            Создать учетную запись
+                        </span>
+    <mat-progress-spinner
+            *ngIf="signUpForm.disabled"
+            [diameter]="24"
+            [mode]="'indeterminate'">
+    </mat-progress-spinner>
+  </button>
+
+</form>

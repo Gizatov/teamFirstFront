@@ -12,6 +12,16 @@ import { mockApiServices } from 'app/mock-api';
 import { LayoutModule } from 'app/layout/layout.module';
 import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {EditUserComponent} from "./modules/admin/pages/edit-user.component/edit-user.component";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {AddUserComponent} from "./modules/admin/pages/add-user.component/add-user.component";
+import {MatInputModule} from "@angular/material/input";
+import {MatSelectModule} from "@angular/material/select";
+import {MatIconModule} from "@angular/material/icon";
+import {MatButtonModule} from "@angular/material/button";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {CandidateInfoComponent} from "./modules/admin/pages/candidate-info.component/candidate-info.component";
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
@@ -20,12 +30,16 @@ const routerConfig: ExtraOptions = {
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        EditUserComponent,
+        AddUserComponent,
+        CandidateInfoComponent
     ],
-    imports     : [
+    imports: [
         BrowserModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(appRoutes, routerConfig),
+        MatSnackBarModule,
 
         // Fuse, FuseConfig & FuseMockAPI
         FuseModule,
@@ -39,7 +53,14 @@ const routerConfig: ExtraOptions = {
         LayoutModule,
 
         // 3rd party modules that require global configuration via forRoot
-        MarkdownModule.forRoot({})
+        MarkdownModule.forRoot({}),
+        FormsModule,
+        MatInputModule,
+        MatSelectModule,
+        ReactiveFormsModule,
+        MatIconModule,
+        MatButtonModule,
+        MatProgressSpinnerModule
     ],
     bootstrap   : [
         AppComponent

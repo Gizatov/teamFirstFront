@@ -13,6 +13,7 @@ export class MainService {
   constructor(private _httpClient: HttpClient)
   {
   }
+  private url = 'http://localhost:8070/auth/get';
 
   set tableData(value: PeriodicElement[])
   {
@@ -30,5 +31,9 @@ export class MainService {
           this._tableData.next(tableData);
         })
     );
+  }
+
+  getAllMembers(): Observable<any>{
+    return this._httpClient.get<any>(this.url);
   }
 }

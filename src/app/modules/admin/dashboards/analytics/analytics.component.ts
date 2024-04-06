@@ -7,6 +7,7 @@ import { AnalyticsService } from 'app/modules/admin/dashboards/analytics/analyti
 @Component({
     selector       : 'analytics',
     templateUrl    : './analytics.component.html',
+    styleUrls: ['./analytics.component.scss'],
     encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -22,8 +23,10 @@ export class AnalyticsComponent implements OnInit, OnDestroy
     chartAge: ApexOptions;
     chartLanguage: ApexOptions;
     data: any;
+    statistic:any;
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+     female: any;
 
     /**
      * Constructor
@@ -44,6 +47,14 @@ export class AnalyticsComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+        this._analyticsService.getStatistics()
+            .subscribe(statistic => {
+                this.statistic = statistic;
+                console.log('statistic',statistic)
+                this.female = statistic.female;
+
+            });
+
         // Get the data
         this._analyticsService.data$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -647,4 +658,11 @@ export class AnalyticsComponent implements OnInit, OnDestroy
             }
         };
     }
+
+    // loadStatistics(): void {
+    //     this._analyticsService.getStatistics()
+    //         .subscribe(statistic => {
+    //             this.statistic = statistic;
+    //         });
+    // }
 }

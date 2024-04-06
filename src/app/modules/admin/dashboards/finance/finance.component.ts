@@ -1,65 +1,159 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { Subject, takeUntil } from 'rxjs';
-import { ApexOptions } from 'ng-apexcharts';
-import { FinanceService } from 'app/modules/admin/dashboards/finance/finance.service';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    OnDestroy,
+    OnInit, ViewChild,
+    ViewEncapsulation
+} from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSelectChange } from '@angular/material/select';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { BehaviorSubject, combineLatest, Subject, takeUntil } from 'rxjs';
+import { AcademyService } from 'app/modules/admin/apps/academy/academy.service';
+import { Category, Course } from 'app/modules/admin/apps/academy/academy.types';
+import {MatTableDataSource} from "@angular/material/table";
+import { catchError, tap } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {DialogService} from "../../../../core/service/dialog.service";
+import {MatPaginator} from "@angular/material/paginator";
 
 @Component({
     selector       : 'finance',
     templateUrl    : './finance.component.html',
+    styleUrls: ['./finance.component.scss'],
     encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinanceComponent implements OnInit, AfterViewInit, OnDestroy
 {
-    @ViewChild('recentTransactionsTable', {read: MatSort}) recentTransactionsTableMatSort: MatSort;
+    categories: Category[];
+    courses: Course[];
+    displayedColumns: string[] = [ 'id','name', 'lastName','totalVote'];
+    dataSource: MatTableDataSource<any>;
+    dataS: any;
+    size = 5;
+    page = 0;
+    total: any;
+    array: any[];
+    filteredCourses: Course[];
+    currentUserVote: boolean  = false;
+    errorOccurred: boolean = true;
+    filters: {
+        categorySlug$: BehaviorSubject<string>;
+        query$: BehaviorSubject<string>;
+        hideCompleted$: BehaviorSubject<boolean>;
+    } = {
+        categorySlug$ : new BehaviorSubject('all'),
+        query$        : new BehaviorSubject(''),
+        hideCompleted$: new BehaviorSubject(false)
+    };
 
-    data: any;
-    accountBalanceOptions: ApexOptions;
-    recentTransactionsDataSource: MatTableDataSource<any> = new MatTableDataSource();
-    recentTransactionsTableColumns: string[] = ['transactionId', 'date', 'name', 'amount', 'status'];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
      * Constructor
      */
-    constructor(private _financeService: FinanceService)
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    constructor(
+        private _activatedRoute: ActivatedRoute,
+        private _changeDetectorRef: ChangeDetectorRef,
+        private _router: Router,
+        private dialogService: DialogService,
+        private _snackBar: MatSnackBar,
+        private _academyService: AcademyService
+    )
     {
     }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
+    private candidateName: any;
 
     /**
      * On init
      */
     ngOnInit(): void
     {
-        // Get the data
-        this._financeService.data$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((data) => {
-
-                // Store the data
-                this.data = data;
-
-                // Store the table data
-                this.recentTransactionsDataSource.data = data.recentTransactions;
-
-                // Prepare the chart data
-                this._prepareChartData();
+        this._academyService.getFinalResult().subscribe(
+            (data: any[]) => {
+                this.dataSource = new MatTableDataSource<any>(data);
+                this.dataSource.paginator = this.paginator;
             });
-    }
 
-    /**
-     * After view init
-     */
-    ngAfterViewInit(): void
-    {
-        // Make the data source sortable
-        this.recentTransactionsDataSource.sort = this.recentTransactionsTableMatSort;
+
+        this._academyService.checkIfCurrentUserExists().subscribe(
+            (response: { isExist: boolean }) => {
+                // Установка значения currentUserVote в зависимости от результата запроса
+                this.currentUserVote = response.isExist;
+
+
+                // Обработка ошибки
+            },
+            error => {
+                console.error('Ошибка при проверке существования пользователя:', error);
+                // Обработайте ошибку здесь
+            }
+        );
+
+
+        this._academyService.getChoiceCandidates().subscribe((data: any) => {
+            this.dataS = data;
+            // this.dataSource.paginator = this.paginator;
+            // this.loading = false;
+        });
+
+
+        // Get the categories
+        this._academyService.categories$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((categories: Category[]) => {
+                this.categories = categories;
+
+                // Mark for check
+                this._changeDetectorRef.markForCheck();
+            });
+
+        // Get the courses
+        this._academyService.courses$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((courses: Course[]) => {
+                this.courses = this.filteredCourses = courses;
+
+                // Mark for check
+                this._changeDetectorRef.markForCheck();
+            });
+
+        // Filter the courses
+        combineLatest([this.filters.categorySlug$, this.filters.query$, this.filters.hideCompleted$])
+            .subscribe(([categorySlug, query, hideCompleted]) => {
+
+                // Reset the filtered courses
+                this.filteredCourses = this.courses;
+
+                // Filter by category
+                if ( categorySlug !== 'all' )
+                {
+                    this.filteredCourses = this.filteredCourses.filter(course => course.category === categorySlug);
+                }
+
+                // Filter by search query
+                if ( query !== '' )
+                {
+                    this.filteredCourses = this.filteredCourses.filter(course => course.title.toLowerCase().includes(query.toLowerCase())
+                        || course.description.toLowerCase().includes(query.toLowerCase())
+                        || course.category.toLowerCase().includes(query.toLowerCase()));
+                }
+
+                // Filter by completed
+                if ( hideCompleted )
+                {
+                    this.filteredCourses = this.filteredCourses.filter(course => course.progress.completed === 0);
+                }
+            });
     }
 
     /**
@@ -77,6 +171,36 @@ export class FinanceComponent implements OnInit, AfterViewInit, OnDestroy
     // -----------------------------------------------------------------------------------------------------
 
     /**
+     * Filter by search query
+     *
+     * @param query
+     */
+    filterByQuery(query: string): void
+    {
+        this.filters.query$.next(query);
+    }
+
+    /**
+     * Filter by category
+     *
+     * @param change
+     */
+    filterByCategory(change: MatSelectChange): void
+    {
+        this.filters.categorySlug$.next(change.value);
+    }
+
+    /**
+     * Show/hide completed courses
+     *
+     * @param change
+     */
+    toggleCompleted(change: MatSlideToggleChange): void
+    {
+        this.filters.hideCompleted$.next(change.checked);
+    }
+
+    /**
      * Track by function for ngFor loops
      *
      * @param index
@@ -87,59 +211,31 @@ export class FinanceComponent implements OnInit, AfterViewInit, OnDestroy
         return item.id || index;
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Private methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Prepare the chart data from the data
-     *
-     * @private
-     */
-    private _prepareChartData(): void
-    {
-        // Account balance
-        this.accountBalanceOptions = {
-            chart  : {
-                animations: {
-                    speed           : 400,
-                    animateGradually: {
-                        enabled: false
-                    }
-                },
-                fontFamily: 'inherit',
-                foreColor : 'inherit',
-                width     : '100%',
-                height    : '100%',
-                type      : 'area',
-                sparkline : {
-                    enabled: true
-                }
-            },
-            colors : ['#A3BFFA', '#667EEA'],
-            fill   : {
-                colors : ['#CED9FB', '#AECDFD'],
-                opacity: 0.5,
-                type   : 'solid'
-            },
-            series : this.data.accountBalance.series,
-            stroke : {
-                curve: 'straight',
-                width: 2
-            },
-            tooltip: {
-                followCursor: true,
-                theme       : 'dark',
-                x           : {
-                    format: 'MMM dd, yyyy'
-                },
-                y           : {
-                    formatter: (value): string => value + '%'
-                }
-            },
-            xaxis  : {
-                type: 'datetime'
-            }
-        };
+    openRegDialog() {
+        this.dialogService.openCandidateInfoModal();
     }
+
+
+    voteForCandidate(candidateId: number): void {
+        this._academyService.voteForCandidate(candidateId)
+            .subscribe((response: any) => {
+            }, (error) => {
+                console.error('Ошибка при отправке голоса:', error);
+                if (error.status === 200) {
+                    this._snackBar.open('Голос за кандидата успешно засчитан.', 'Закрыть', {
+                        duration: 3000,
+                    });
+                    window.location.reload();
+                } else {
+                    this._snackBar.open('Что то пошло не так.', 'Закрыть', {
+                        duration: 3000,
+                    });
+                }
+            });
+
+    }
+
+    ngAfterViewInit(): void {
+    }
+
 }

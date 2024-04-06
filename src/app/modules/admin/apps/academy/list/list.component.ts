@@ -5,6 +5,11 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { BehaviorSubject, combineLatest, Subject, takeUntil } from 'rxjs';
 import { AcademyService } from 'app/modules/admin/apps/academy/academy.service';
 import { Category, Course } from 'app/modules/admin/apps/academy/academy.types';
+import {MatTableDataSource} from "@angular/material/table";
+import {DialogService} from "../../../../../core/service/dialog.service";
+import { catchError, tap } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
     selector       : 'academy-list',
@@ -17,6 +22,7 @@ export class AcademyListComponent implements OnInit, OnDestroy
     categories: Category[];
     courses: Course[];
     filteredCourses: Course[];
+    currentUserVote: boolean  = false;
     filters: {
         categorySlug$: BehaviorSubject<string>;
         query$: BehaviorSubject<string>;
@@ -28,6 +34,7 @@ export class AcademyListComponent implements OnInit, OnDestroy
     };
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+    dataSource: any[];
 
     /**
      * Constructor
@@ -36,6 +43,8 @@ export class AcademyListComponent implements OnInit, OnDestroy
         private _activatedRoute: ActivatedRoute,
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
+        private dialogService: DialogService,
+        private _snackBar: MatSnackBar,
         private _academyService: AcademyService
     )
     {
@@ -50,6 +59,27 @@ export class AcademyListComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+        this._academyService.checkIfCurrentUserExists().subscribe(
+            (response: { isExist: boolean }) => {
+                // Установка значения currentUserVote в зависимости от результата запроса
+                this.currentUserVote = response.isExist;
+
+                // Обработка ошибки
+            },
+            error => {
+                console.error('Ошибка при проверке существования пользователя:', error);
+                // Обработайте ошибку здесь
+            }
+        );
+
+
+        this._academyService.getAllCandidates().subscribe((data: any[]) => {
+            this.dataSource = data;
+            // this.dataSource.paginator = this.paginator;
+            // this.loading = false;
+        });
+
+
         // Get the categories
         this._academyService.categories$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -153,4 +183,29 @@ export class AcademyListComponent implements OnInit, OnDestroy
     {
         return item.id || index;
     }
+
+    openRegDialog() {
+        this.dialogService.openCandidateInfoModal();
+    }
+
+
+    voteForCandidate(candidateId: number): void {
+        this._academyService.voteForCandidate(candidateId)
+            .subscribe((response: any) => {
+            }, (error) => {
+                console.error('Ошибка при отправке голоса:', error);
+                if (error.status === 200) {
+                    this._snackBar.open('Голос за кандидата успешно засчитан.', 'Закрыть', {
+                        duration: 3000,
+                    });
+                    window.location.reload();
+                } else {
+                    this._snackBar.open('Что то пошло не так.', 'Закрыть', {
+                        duration: 3000,
+                    });
+                }
+            });
+
+    }
+
 }

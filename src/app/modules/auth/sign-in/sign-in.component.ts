@@ -45,8 +45,8 @@ export class AuthSignInComponent implements OnInit
     {
         // Create the form
         this.signInForm = this._formBuilder.group({
-            email     : ['hughes.brian@company.com', [Validators.required, Validators.email]],
-            password  : ['admin', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
+            password: ['', [Validators.required]],
             rememberMe: ['']
         });
     }
@@ -58,11 +58,9 @@ export class AuthSignInComponent implements OnInit
     /**
      * Sign in
      */
-    signIn(): void
-    {
+    signIn(): void {
         // Return if the form is invalid
-        if ( this.signInForm.invalid )
-        {
+        if (this.signInForm.invalid) {
             return;
         }
 
@@ -76,29 +74,29 @@ export class AuthSignInComponent implements OnInit
         this._authService.signIn(this.signInForm.value)
             .subscribe(
                 () => {
-
-                    // Set the redirect url.
-                    // The '/signed-in-redirect' is a dummy url to catch the request and redirect the user
-                    // to the correct page after a successful sign in. This way, that url can be set via
-                    // routing file and we don't have to touch here.
+                    // Успешная аутентификация
                     const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
-
-                    // Navigate to the redirect url
                     this._router.navigateByUrl(redirectURL);
-
                 },
-                (response) => {
-
+                (error) => {
                     // Re-enable the form
                     this.signInForm.enable();
-
-                    // Reset the form
                     this.signInNgForm.resetForm();
+
+                    // Default error message
+                    let errorMessage = 'Неправильный адрес электронной почты или пароль';
+
+                    // Check the type of error
+                    if (error.status === 401) {
+                        errorMessage = 'Неправильный email или пароль';
+                    } else if (error.status === 409) {
+                        errorMessage = 'Пользователь с таким email уже существует';
+                    }
 
                     // Set the alert
                     this.alert = {
-                        type   : 'error',
-                        message: 'Wrong email or password'
+                        type: 'error',
+                        message: errorMessage
                     };
 
                     // Show the alert
@@ -106,4 +104,5 @@ export class AuthSignInComponent implements OnInit
                 }
             );
     }
+
 }

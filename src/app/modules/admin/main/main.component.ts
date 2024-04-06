@@ -1,69 +1,56 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
-import {MatTableDataSource} from "@angular/material/table";
-import {MatPaginator} from "@angular/material/paginator";
-import {catchError, EMPTY, Subject, takeUntil, throwError, timeout} from "rxjs";
-import {PeriodicElement} from "../../../core/model/periodic-element.types";
-import {MainService} from "../../../core/service/main.service";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { MainService } from '../../../core/service/main.service';
+import {Router} from "@angular/router";
+import {DialogService} from "../../../core/service/dialog.service";
+import {MatDialog} from "@angular/material/dialog";
+import {AddUserComponent} from "../pages/authentication/add-user/classic/add-user.component";
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit, AfterViewInit {
-  private _unsubscribeAll: Subject<any> = new Subject<any>();
-
-  displayedColumns: string[] = ['name', 'weight', 'symbol', 'position'];
-  displayedColumnsForFilter: string[] = this.displayedColumns.map(col => '_' + col);
-  columnsToDisplay: string[] = this.displayedColumns.slice();
-  dataSource = new MatTableDataSource<PeriodicElement>();
+export class MainComponent implements OnInit {
+  displayedColumns: string[] = [ 'id','name', 'lastName','studentId', 'email','faculty','role', 'actions'];
+  dataSource: MatTableDataSource<any>;
+  dataS
   loading: boolean = false;
-  filterValues: { [key: string]: string } = {};
+  // dataSource: any[] = [];
+  size = 5;
+  page = 0;
+  total: any;
 
-  constructor(private _mainService: MainService) { }
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
+  constructor(private mainService: MainService ,private router: Router,private dialogService: DialogService,private _matDialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.paginator._intl.itemsPerPageLabel = 'Items per page:';
-    // Subscribe to user changes
     this.loading = true;
-    this._mainService.getTableData()
-        .pipe(
-            takeUntil(this._unsubscribeAll),
-            catchError((error: any) => {
-              console.error('Произошла ошибка при получении данных:', error);
-              this.loading = false;
-              return EMPTY;
-            })
-        )
-        .subscribe((periodicElement: PeriodicElement[]) => {
-          if (periodicElement) {
-            this.dataSource.data = periodicElement;
-            this.loading = false;
-          }
-        });
+    this.mainService.getAllMembers().subscribe((data: any[]) => {
+      this.dataSource = new MatTableDataSource<any>(data);
+      this.dataSource.paginator = this.paginator;
+      this.loading = false;
+    });
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+  editUser(user: any): void {
+    // Implement your logic for editing user here
   }
 
-  handleFilterValue(column: string, $event: any) {
-    const filterValue = $event.target.value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  deleteUser(user: any): void {
+    // Implement your logic for deleting user here
+  }
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+  editRecord(element: any): void {
+    // Перенаправление на компонент редактирования с параметрами
+    this.router.navigate(['/edit-user', element.id]);
+  }
+  openEditUserModal(userId: string): void {
+    this.dialogService.openEditUserModal(userId);
+  }
+  openRegDialog() {
+    this.dialogService.openAddUserModal();
   }
 }
