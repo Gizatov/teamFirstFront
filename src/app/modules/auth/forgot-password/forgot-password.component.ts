@@ -89,7 +89,7 @@ export class AuthForgotPasswordComponent implements OnInit
                     // Set the alert
                     this.alert = {
                         type   : 'success',
-                        message: 'Password reset sent! You\'ll receive an email if you are registered on our system.'
+                        message: 'Сброс пароля отправлен!\ Вы получите электронное письмо, если вы зарегистрированы в нашей системе.'
                     };
                 },
                 (response) => {

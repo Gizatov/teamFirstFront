@@ -89,6 +89,7 @@ export class FinanceComponent implements OnInit, AfterViewInit, OnDestroy
             (response: { isExist: boolean }) => {
                 // Установка значения currentUserVote в зависимости от результата запроса
                 this.currentUserVote = response.isExist;
+                this.errorOccurred = this.currentUserVote;
 
 
                 // Обработка ошибки

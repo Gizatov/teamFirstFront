@@ -99,7 +99,10 @@ export const appRoutes: Route[] = [
                 {path: 'notes', loadChildren: () => import('app/modules/admin/apps/notes/notes.module').then(m => m.NotesModule)},
                 {path: 'scrumboard', loadChildren: () => import('app/modules/admin/apps/scrumboard/scrumboard.module').then(m => m.ScrumboardModule)},
                 {path: 'tasks', loadChildren: () => import('app/modules/admin/apps/tasks/tasks.module').then(m => m.TasksModule)},
+                    {path: 'support', loadChildren: () => import('app/modules/admin/apps/support/support.module').then(m => m.SupportModule)}
             ]},
+
+
 
             // Pages
             {path: 'pages', children: [

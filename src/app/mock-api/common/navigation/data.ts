@@ -32,7 +32,17 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 link: '/apps/academy'
             }
 
-            ,{
+            ,
+
+    {
+        id: 'apps.support',
+        title: 'Регистрация в Президенты',
+        type: 'basic',
+        icon: 'heroicons_outline:academic-cap',
+        link: '/apps/support'
+    }
+
+    ,{
                 id   : 'pages.settings',
                 title: 'Settings',
                 type : 'basic',

@@ -35,12 +35,14 @@ export class AcademyListComponent implements OnInit, OnDestroy
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     dataSource: any[];
+    show: boolean = false;
 
     /**
      * Constructor
      */
     constructor(
         private _activatedRoute: ActivatedRoute,
+        private cdr: ChangeDetectorRef,
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
         private dialogService: DialogService,
@@ -75,6 +77,9 @@ export class AcademyListComponent implements OnInit, OnDestroy
 
         this._academyService.getAllCandidates().subscribe((data: any[]) => {
             this.dataSource = data;
+            this.show = true;
+            this.cdr.detectChanges();
+            console.log('show',this.show)
             // this.dataSource.paginator = this.paginator;
             // this.loading = false;
         });
@@ -198,7 +203,8 @@ export class AcademyListComponent implements OnInit, OnDestroy
                     this._snackBar.open('Голос за кандидата успешно засчитан.', 'Закрыть', {
                         duration: 3000,
                     });
-                    window.location.reload();
+                    this.currentUserVote = true;
+                    this.cdr.detectChanges();
                 } else {
                     this._snackBar.open('Что то пошло не так.', 'Закрыть', {
                         duration: 3000,

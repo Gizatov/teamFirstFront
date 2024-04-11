@@ -35,13 +35,13 @@ export class SettingsAccountComponent implements OnInit
         this.userRole = localStorage.getItem('role');
         // Create the form
         this.accountForm = this._formBuilder.group({
-            name    : ['Test Testov'],
+            name    : ['Gizatov Arnur'],
             username: [this.userEmail],
-            title   : [this.userRole],
-            company : ['YXZ Software'],
+            Role   : [this.userRole],
+            Course : ['4'],
             about   : ['Hey! This is Brian; husband, father and gamer. I\'m mostly passionate about bleeding edge tech and chocolate! 🍫'],
             email   : [this.userEmail, Validators.email],
-            phone   : ['121-490-33-12'],
+            id   : ['200103128'],
             country : ['usa'],
             language: ['english']
         });

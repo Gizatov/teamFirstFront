@@ -4,7 +4,6 @@ import { HelpCenterFaqsComponent } from 'app/modules/admin/apps/help-center/faqs
 import { HelpCenterGuidesComponent } from 'app/modules/admin/apps/help-center/guides/guides.component';
 import { HelpCenterGuidesCategoryComponent } from 'app/modules/admin/apps/help-center/guides/category/category.component';
 import { HelpCenterGuidesGuideComponent } from 'app/modules/admin/apps/help-center/guides/guide/guide.component';
-import { HelpCenterSupportComponent } from 'app/modules/admin/apps/help-center/support/support.component';
 import { HelpCenterFaqsResolver, HelpCenterGuidesCategoryResolver, HelpCenterGuidesGuideResolver, HelpCenterGuidesResolver, HelpCenterMostAskedFaqsResolver } from 'app/modules/admin/apps/help-center/help-center.resolvers';
 
 export const helpCenterRoutes: Route[] = [
@@ -52,9 +51,5 @@ export const helpCenterRoutes: Route[] = [
                 ]
             }
         ]
-    },
-    {
-        path     : 'support',
-        component: HelpCenterSupportComponent
     }
 ];

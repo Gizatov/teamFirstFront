@@ -12,7 +12,6 @@ import { HelpCenterFaqsComponent } from 'app/modules/admin/apps/help-center/faqs
 import { HelpCenterGuidesComponent } from 'app/modules/admin/apps/help-center/guides/guides.component';
 import { HelpCenterGuidesCategoryComponent } from 'app/modules/admin/apps/help-center/guides/category/category.component';
 import { HelpCenterGuidesGuideComponent } from 'app/modules/admin/apps/help-center/guides/guide/guide.component';
-import { HelpCenterSupportComponent } from 'app/modules/admin/apps/help-center/support/support.component';
 import { helpCenterRoutes } from 'app/modules/admin/apps/help-center/help-center.routing';
 
 @NgModule({
@@ -21,8 +20,7 @@ import { helpCenterRoutes } from 'app/modules/admin/apps/help-center/help-center
         HelpCenterFaqsComponent,
         HelpCenterGuidesComponent,
         HelpCenterGuidesCategoryComponent,
-        HelpCenterGuidesGuideComponent,
-        HelpCenterSupportComponent
+        HelpCenterGuidesGuideComponent
     ],
     imports     : [
         RouterModule.forChild(helpCenterRoutes),
