@@ -69,13 +69,48 @@
     </mat-error>
   </mat-form-field>
 
+  <!-- StudentID field -->
+  <mat-form-field class="w-full">
+    <mat-label>StudentID</mat-label>
+    <input
+            id="studentId"
+            matInput
+            [formControlName]="'studentId'"> <!-- Заменено на 'lastName' -->
+    <mat-error *ngIf="signUpForm.get('studentId').hasError('required')">
+      Full studentId is required
+    </mat-error>
+  </mat-form-field>
+
+
+  <!-- Faculty field -->
+  <mat-form-field class="w-full">
+    <mat-label>Faculty</mat-label>
+    <mat-select formControlName="faculty">
+      <mat-option value="law">Факультет права и социальных наук</mat-option>
+      <mat-option value="ped">Факультет педагогики и гуманитарных наук</mat-option>
+      <mat-option value="engineer">Факультет инженерии и естественных наук</mat-option>
+      <mat-option value="business">Бизнес-школа СДУ</mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <!-- Gender field -->
   <mat-form-field class="w-full">
     <mat-label>Gender</mat-label>
     <mat-select formControlName="gender">
       <mat-option value="male">Male</mat-option>
       <mat-option value="female">Female</mat-option>
-      <mat-option value="other">Other</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <!-- Course field -->
+  <mat-form-field class="w-full">
+    <mat-label>Course</mat-label>
+    <mat-select formControlName="course">
+      <mat-option value="1">1</mat-option>
+      <mat-option value="2">2</mat-option>
+      <mat-option value="3">3</mat-option>
+      <mat-option value="4">4</mat-option>
     </mat-select>
   </mat-form-field>
 

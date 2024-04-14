@@ -28,12 +28,15 @@ export class CandidateInfoComponent implements OnInit {
 
     ngOnInit(): void {
         this.signUpForm = this._formBuilder.group({
-                name: ['', Validators.required],
-                lastName: ['', Validators.required],
-                email: ['', [Validators.required, Validators.email]],
-                password: ['', Validators.required],
-                gender: [''],
-                role: ['', Validators.required]
+            name: ['', Validators.required],
+            lastName: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
+            password: ['', Validators.required],
+            studentId: ['', Validators.required],
+            faculty: ['', Validators.required],
+            gender: [''],
+            course: ['', Validators.required],
+            role: ['', Validators.required]
             }
         );
     }
@@ -54,7 +57,10 @@ export class CandidateInfoComponent implements OnInit {
                 lastName: formData.lastName,
                 email: formData.email,
                 password: formData.password,
+                studentId: formData.studentId,
+                faculty: formData.faculty,
                 gender: formData.gender,
+                course: formData.course,
                 role: {
                     id: formData.role
                 }

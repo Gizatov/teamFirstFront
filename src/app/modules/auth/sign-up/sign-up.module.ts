@@ -13,6 +13,7 @@ import { AuthSignUpComponent } from 'app/modules/auth/sign-up/sign-up.component'
 import { authSignupRoutes } from 'app/modules/auth/sign-up/sign-up.routing';
 import {MatOptionModule} from "@angular/material/core";
 import {MatSelectModule} from "@angular/material/select";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
     declarations: [
@@ -30,7 +31,8 @@ import {MatSelectModule} from "@angular/material/select";
         FuseAlertModule,
         SharedModule,
         MatOptionModule,
-        MatSelectModule
+        MatSelectModule,
+        MatTooltipModule
     ]
 })
 export class AuthSignUpModule

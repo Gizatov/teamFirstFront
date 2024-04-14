@@ -9,12 +9,14 @@ import { FuseAlertModule } from '@fuse/components/alert';
 import { SharedModule } from 'app/shared/shared.module';
 import { HelpCenterSupportComponent } from 'app/modules/admin/apps/support/support.component';
 import {supportRouting} from "./support.routing";
+import {MatSliderModule} from "@angular/material/slider";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @NgModule({
     declarations: [
         HelpCenterSupportComponent
     ],
-    imports     : [
+    imports: [
         RouterModule.forChild(supportRouting),
         MatButtonModule,
         MatExpansionModule,
@@ -22,7 +24,9 @@ import {supportRouting} from "./support.routing";
         MatIconModule,
         MatInputModule,
         FuseAlertModule,
-        SharedModule
+        SharedModule,
+        MatSliderModule,
+        MatProgressSpinnerModule
     ]
 })
 export class SupportModule

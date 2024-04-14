@@ -10,7 +10,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSelectChange } from '@angular/material/select';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { BehaviorSubject, combineLatest, Subject, takeUntil } from 'rxjs';
+import {BehaviorSubject, combineLatest, map, Observable, Subject, takeUntil, timer} from 'rxjs';
 import { AcademyService } from 'app/modules/admin/apps/academy/academy.service';
 import { Category, Course } from 'app/modules/admin/apps/academy/academy.types';
 import {MatTableDataSource} from "@angular/material/table";
@@ -34,6 +34,7 @@ export class FinanceComponent implements OnInit, AfterViewInit, OnDestroy
     displayedColumns: string[] = [ 'id','name', 'lastName','totalVote'];
     dataSource: MatTableDataSource<any>;
     dataS: any;
+    countdownString$: Observable<string>;
     size = 5;
     page = 0;
     total: any;
@@ -155,7 +156,38 @@ export class FinanceComponent implements OnInit, AfterViewInit, OnDestroy
                     this.filteredCourses = this.filteredCourses.filter(course => course.progress.completed === 0);
                 }
             });
+
+
+
+        const targetDate = new Date('2024-04-20T00:00:00').getTime();
+
+        // Создаем Observable, который генерирует событие каждую секунду
+        this.countdownString$ = timer(0, 1000).pipe(
+            map(() => {
+                // Получаем текущую дату и время
+                const currentDate = new Date().getTime();
+
+                // Рассчитываем разницу между текущей и целевой датой
+                const timeDiff = targetDate - currentDate;
+
+                // Проверяем, что оставшееся время положительное
+                if (timeDiff > 0) {
+                    // Рассчитываем оставшееся время в днях, часах, минутах и секундах
+                    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+                    // Формируем строку для отображения оставшегося времени
+                    return `${days} дней ${hours} часов ${minutes} минут ${seconds} секунд`;
+                } else {
+                    // Если целевая дата прошла, выводим сообщение
+                    return 'Целевая дата прошла';
+                }
+            })
+        );
     }
+
 
     /**
      * On destroy

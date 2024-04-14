@@ -48,12 +48,15 @@ export class AuthSignUpComponent implements OnInit {
     ngOnInit(): void {
         // Create the form
         this.signUpForm = this._formBuilder.group({
-                name: ['', Validators.required],
-                lastName: ['', Validators.required],
-                email: ['', [Validators.required, Validators.email]],
-                password: ['', Validators.required],
-                gender: [''],
-                role: ['', Validators.required]
+            name: ['', Validators.required],
+            lastName: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
+            password: ['', Validators.required],
+            studentId: ['', Validators.required],
+            faculty: ['', Validators.required],
+            gender: [''],
+            course: ['', Validators.required],
+            role: ['', Validators.required]
             }
         );
     }
@@ -65,45 +68,6 @@ export class AuthSignUpComponent implements OnInit {
     /**
      * Sign up
      */
-    // signUp(): void {
-    //     // Do nothing if the form is invalid
-    //     if (this.signUpForm.invalid) {
-    //         return;
-    //     }
-    //
-    //     // Disable the form
-    //     this.signUpForm.disable();
-    //
-    //     // Hide the alert
-    //     this.showAlert = false;
-    //
-    //     // Sign up
-    //     this._authService.signUp(this.signUpForm.value)
-    //         .subscribe(
-    //             (response) => {
-    //
-    //                 // Navigate to the confirmation required page
-    //                 this._router.navigateByUrl('/confirmation-required');
-    //             },
-    //             (response) => {
-    //
-    //                 // Re-enable the form
-    //                 this.signUpForm.enable();
-    //
-    //                 // Reset the form
-    //                 this.signUpNgForm.resetForm();
-    //
-    //                 // Set the alert
-    //                 this.alert = {
-    //                     type: 'error',
-    //                     message: 'Something went wrong, please try again.'
-    //                 };
-    //
-    //                 // Show the alert
-    //                 this.showAlert = true;
-    //             }
-    //         );
-    // }
 
     onSignUp(): void {
         if (this.signUpForm.valid) {
@@ -113,7 +77,10 @@ export class AuthSignUpComponent implements OnInit {
                 lastName: formData.lastName,
                 email: formData.email,
                 password: formData.password,
+                studentId: formData.studentId,
+                faculty: formData.faculty,
                 gender: formData.gender,
+                course: formData.course,
                 role: {
                     id: formData.role
                 }
@@ -132,6 +99,8 @@ export class AuthSignUpComponent implements OnInit {
             });
         }
     }
+
+
 
 
 

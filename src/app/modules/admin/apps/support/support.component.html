@@ -99,6 +99,86 @@
             <ng-template #isAdmin>
                 <!-- Форма для админа -->
                 <div class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+                    <form
+                            class="space-y-3"
+                            [formGroup]="adminRegEventForm">
+                        <div class="mb-6">
+                            <div class="text-2xl font-bold tracking-tight">Submit your request</div>
+                            <div class="text-secondary">Your request will be processed and our support staff will get back to you in 24 hours.</div>
+                        </div>
+                        <mat-form-field class="w-120">
+                            <input matInput type="date" [formControlName]="'dateRegStart'" required>
+                            <mat-label>Начало регистрации Кандидатов</mat-label>
+                            <mat-error *ngIf="adminRegEventForm.get('dateRegStart').hasError('required')">
+                                Required
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="w-120">
+                            <input matInput type="date" [formControlName]="'dateRegEnd'" required>
+                            <mat-label>Конец регистрации Кандидатов</mat-label>
+                            <mat-error *ngIf="adminRegEventForm.get('dateRegEnd').hasError('required')">
+                                Required
+                            </mat-error>
+                        </mat-form-field>
+
+                        <div class="w-120">
+                            <mat-label>Количество кандидатов: </mat-label>
+                            <mat-slider
+                                    thumbLabel
+                                    class="custom-slider"
+                                    [min]="1"
+                                    [max]="10"
+                                    [step]="1"
+                                    [formControlName]="'countCandidate'"
+                                    required
+                            ></mat-slider>
+                            <span>{{ adminRegEventForm.get('countCandidate').value }}</span>
+                            <mat-error *ngIf="adminRegEventForm.get('countCandidate').hasError('required')">
+                                Required
+                            </mat-error>
+                        </div>
+
+
+                        <mat-form-field class="w-120">
+                            <input matInput type="date" [formControlName]="'dateEventStart'" required>
+                            <mat-label>Начало выборов</mat-label>
+                            <mat-error *ngIf="adminRegEventForm.get('dateEventStart').hasError('required')">
+                                Required
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="w-120">
+                            <input matInput type="date" [formControlName]="'dateEventEnd'" required>
+                            <mat-label>Конец выборов</mat-label>
+                            <mat-error *ngIf="adminRegEventForm.get('dateEventEnd').hasError('required')">
+                                Required
+                            </mat-error>
+                        </mat-form-field>
+
+
+                        <!-- Submit button -->
+                        <button
+                                class="fuse-mat-button-large w-full mt-6"
+                                mat-flat-button
+                                [color]="'primary'"
+                                [disabled]="adminRegEventForm.disabled"
+                                (click)="onSignUp()">
+                        <span *ngIf="!adminRegEventForm.disabled">
+                            Сохранить
+                        </span>
+                            <mat-progress-spinner
+                                    *ngIf="adminRegEventForm.disabled"
+                                    [diameter]="24"
+                                    [mode]="'indeterminate'">
+                            </mat-progress-spinner>
+                        </button>
+
+
+
+
+
+                    </form>
                     <!-- Ваш код формы для не-кандидата здесь -->
                 </div>
             </ng-template>

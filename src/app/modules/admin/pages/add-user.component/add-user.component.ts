@@ -32,7 +32,10 @@ export class AddUserComponent implements OnInit {
                 lastName: ['', Validators.required],
                 email: ['', [Validators.required, Validators.email]],
                 password: ['', Validators.required],
+                studentId: ['', Validators.required],
+                faculty: ['', Validators.required],
                 gender: [''],
+                course: ['', Validators.required],
                 role: ['', Validators.required]
             }
         );
@@ -42,9 +45,6 @@ export class AddUserComponent implements OnInit {
         this.dialogRef.close();
     }
 
-    saveChanges() {
-
-    }
 
     onSignUp(): void {
         if (this.signUpForm.valid) {
@@ -54,7 +54,10 @@ export class AddUserComponent implements OnInit {
                 lastName: formData.lastName,
                 email: formData.email,
                 password: formData.password,
+                studentId: formData.studentId,
+                faculty: formData.faculty,
                 gender: formData.gender,
+                course: formData.course,
                 role: {
                     id: formData.role
                 }
@@ -67,8 +70,8 @@ export class AddUserComponent implements OnInit {
                     this._snackBar.open('Регистрация прошла успешно', 'OK', {
                         duration: 3000,
                     });
-
-                    this.router.navigate(['/main']);
+                    this.close();
+                    window.location.reload();
                 }
             });
         }

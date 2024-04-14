@@ -109,6 +109,22 @@ th.mat-header-cell, td.mat-cell {
 }
 
 
+.countdown-timer {
+  text-align: center; /* Выравнивание текста по центру */
+}
+
+.countdown-label {
+  font-size: 24px; /* Размер шрифта метки */
+  font-weight: bold; /* Жирный шрифт для метки */
+  color: #000; /* Цвет текста метки */
+}
+
+.countdown-time {
+  font-size: 36px; /* Увеличенный размер шрифта времени */
+  font-weight: bold; /* Жирный шрифт для времени */
+  color: #0b4ad2; /* Красный цвет текста времени */
+}
+
 
 
 

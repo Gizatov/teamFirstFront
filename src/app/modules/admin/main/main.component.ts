@@ -13,14 +13,13 @@ import {AddUserComponent} from "../pages/authentication/add-user/classic/add-use
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
-  displayedColumns: string[] = [ 'id','name', 'lastName','studentId', 'email','faculty','role', 'actions'];
+  displayedColumns: string[] = [ 'id','name', 'lastName','studentId', 'email','course','role', 'actions'];
   dataSource: MatTableDataSource<any>;
-  dataS
   loading: boolean = false;
-  // dataSource: any[] = [];
   size = 5;
   page = 0;
   total: any;
+  searchStudentId: string = '';
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -32,16 +31,41 @@ export class MainComponent implements OnInit {
       this.dataSource = new MatTableDataSource<any>(data);
       this.dataSource.paginator = this.paginator;
       this.loading = false;
+
+      if (this.searchStudentId.trim()) {
+        this.applyFilter();
+      }
     });
+  }
+  applyFilter(): void {
+    this.loading = true;
+    if (this.searchStudentId.trim()) {
+      // Фильтруем текущий dataSource по ИИН
+      this.dataSource.filter = this.searchStudentId.trim().toLowerCase();
+    } else {
+      // Если searchIin пустой, отображаем все записи
+      this.dataSource.filter = '';
+    }
+    this.loading = false;
   }
 
   editUser(user: any): void {
     // Implement your logic for editing user here
   }
 
-  deleteUser(user: any): void {
-    // Implement your logic for deleting user here
+  deleteUser(userId: string): void {
+    this.mainService.deleteById(userId).subscribe(
+        () => {
+          // Здесь можно выполнить какие-либо действия после успешного удаления
+          console.log('Пользователь успешно удален');
+        },
+        (error) => {
+          // Здесь можно обработать ошибку удаления
+          console.error('Ошибка при удалении пользователя:', error);
+        }
+    );
   }
+
 
   editRecord(element: any): void {
     // Перенаправление на компонент редактирования с параметрами
