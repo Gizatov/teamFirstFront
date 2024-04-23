@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "4200:4200" # Этот порт пробрасывается на хост-машину
+    networks:
+      - webnet
+
+#  nginx:
+#    image: nginx:alpine
+#    container_name: nginx
+#    ports:
+#      - "8080:8080" # Nginx будет доступен на стандартном HTTP-порту
+#    volumes:
+#      - ./nginx.conf:/etc/nginx/nginx.conf:ro # Путь к вашему файлу конфигурации Nginx
+#    depends_on:
+#      - frontend
+#    networks:
+#      - webnet
+
+networks:
+  webnet:

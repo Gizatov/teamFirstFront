@@ -9,9 +9,9 @@ import {User} from "../user/user.types";
 export class AuthService
 {
     private _authenticated: boolean = false;
-    private register = 'http://localhost:8070/auth/register';
-    private auth = 'http://localhost:8070/auth/authenticate';
-    private getById = 'http://localhost:8070/users/';
+    private register = 'https://sduelection.kz/auth/register';
+    private auth = 'https://sduelection.kz/auth/authenticate';
+    private getById = 'https://sduelection.kz/users/';
 
 
 
@@ -221,10 +221,10 @@ export class AuthService
     }
 
     getUserById(userId: string): Observable<User> {
-        return this._httpClient.get<User>(`http://localhost:8070/users/${userId}`); // Предполагается, что у вас есть роутер API для получения пользователя по его идентификатору
+        return this._httpClient.get<User>(`https://sduelection.kz/users/${userId}`); // Предполагается, что у вас есть роутер API для получения пользователя по его идентификатору
     }
 
     updateUser(user: User): Observable<User> {
-        return this._httpClient.post<User>(`http://localhost:8070/users/${user.id}`, user);
+        return this._httpClient.post<User>(`https://sduelection.kz/users/${user.id}`, user);
     }
 }

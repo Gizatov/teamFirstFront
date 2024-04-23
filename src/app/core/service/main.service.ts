@@ -11,8 +11,8 @@ export class MainService {
   {
   }
   private readonly GENERAL = `${GATEWAY}/auth`;
-  private url = 'http://localhost:8070/auth/get';
-  private deleteUrl = 'http://localhost:8070/users/delete';
+  private url = 'https://sduelection.kz/auth/get';
+  private deleteUrl = 'https://sduelection.kz/users/delete';
 
   getAllMembers(): Observable<any>{
     return this._httpClient.get<any>(this.url);
