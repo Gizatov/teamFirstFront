@@ -9,7 +9,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 export class AnalyticsService
 {
-    private baseUrl = 'http://localhost:8070';
+    private baseUrl = 'https://sduelection.kz';
     private _data: BehaviorSubject<any> = new BehaviorSubject(null);
 
     /**

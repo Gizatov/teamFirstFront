@@ -19,11 +19,11 @@ export class AcademyService
     constructor(private _httpClient: HttpClient)
     {
     }
-    private url = 'http://localhost:8070/users/candidates';
-    private urlCandidate = 'http://localhost:8070/users/candidate';
-    private urlFinal = 'http://localhost:8070/users/result'
+    private url = 'https://sduelection.kz/users/candidates';
+    private urlCandidate = 'https://sduelection.kz/users/candidate';
+    private urlFinal = 'https://sduelection.kz/users/result'
 
-    private urlStudent = 'http://localhost:8070/student';
+    private urlStudent = 'https://sduelection.kz/student';
 
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors
