@@ -1,100 +1,76 @@
 <div class="flex flex-col flex-auto min-w-0">
+    <img src="assets/images/logo/sdu6.jpg" style="position: absolute; top: 0; bottom: 100px; left: 0; width: 100%; height: 970px; z-index: -1; filter: brightness(0.4);">
+
 
     <!-- Main -->
     <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
         <div class="flex flex-col w-full max-w-4xl">
-            <div class="mt-2 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight">
+            <div class="text-center mt-2 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight border border-gray-500 text-white p-4">
                 Регистрация на выборы
             </div>
+
+
+            <div *ngIf="this.userRole == 'admin'">
+
             <!-- Form -->
             <ng-container *ngIf="isCandidate; else isAdmin">
-            <div class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
-                <!-- Alert -->
-                <fuse-alert
-                    class="mb-8"
-                    *ngIf="alert"
-                    [type]="alert.type"
-                    [showIcon]="false">
-                    {{alert.message}}
-                </fuse-alert>
-                <form
-                    class="space-y-3"
-                    [formGroup]="supportForm"
-                    #supportNgForm="ngForm">
-                    <div class="mb-6">
-                        <div class="text-2xl font-bold tracking-tight">Submit your request</div>
-                        <div class="text-secondary">Your request will be processed and our support staff will get back to you in 24 hours.</div>
-                    </div>
-                    <!-- Name -->
-                    <mat-form-field class="w-full">
-                        <input
-                            matInput
-                            [formControlName]="'name'"
-                            [required]="true">
-                        <mat-label>Name</mat-label>
-                        <mat-error *ngIf="supportForm.get('name').hasError('required')">
-                            Required
-                        </mat-error>
-                    </mat-form-field>
-                    <!-- Email -->
-                    <mat-form-field class="w-full">
-                        <input
-                            type="email"
-                            matInput
-                            [formControlName]="'email'"
-                            [required]="true">
-                        <mat-label>Email</mat-label>
-                        <mat-error *ngIf="supportForm.get('email').hasError('required')">
-                            Required
-                        </mat-error>
-                        <mat-error *ngIf="supportForm.get('email').hasError('email')">
-                            Enter a valid email address
-                        </mat-error>
-                    </mat-form-field>
-                    <!-- Subject -->
-                    <mat-form-field class="w-full">
-                        <input
-                            matInput
-                            [formControlName]="'subject'"
-                            [required]="true">
-                        <mat-label>Subject</mat-label>
-                        <mat-error *ngIf="supportForm.get('subject').hasError('required')">
-                            Required
-                        </mat-error>
-                    </mat-form-field>
-                    <!-- Message -->
-                    <mat-form-field class="fuse-mat-textarea w-full">
-                        <textarea
-                            matInput
-                            [formControlName]="'message'"
-                            [required]="true"
-                            [rows]="5"
-                            matTextareaAutosize></textarea>
-                        <mat-label>Message</mat-label>
-                        <mat-error *ngIf="supportForm.get('message').hasError('required')">
-                            Required
-                        </mat-error>
-                    </mat-form-field>
-                    <!-- Actions -->
-                    <div class="flex items-center justify-end">
-                        <button
-                            mat-button
-                            [color]="'accent'"
-                            [disabled]="supportForm.pristine || supportForm.untouched"
-                            (click)="clearForm()">
-                            Clear
-                        </button>
-                        <button
-                            class="ml-2"
-                            mat-flat-button
-                            [color]="'primary'"
-                            [disabled]="supportForm.pristine || supportForm.invalid"
-                            (click)="sendForm()">
-                            Submit
-                        </button>
-                    </div>
-                </form>
-            </div>
+                <div class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+                    <form class="space-y-6">
+                        <table class="w-full text-center">
+                            <thead>
+                            <tr>
+                                <th class="px-4 py-2 text-2xl">События</th>
+                                <th class="px-4 py-2 text-2xl">Даты</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="info-block">
+                                <td class="info-title px-4 py-2">Начало регистрации:</td>
+                                <td class="info-content px-4 py-2 text-3xl">
+                                    <span *ngIf="!isEditing">{{ registrationStart }}</span>
+                                    <input *ngIf="isEditing" type="date" [(ngModel)]="regStartUpdate" name="regStartUpdate" class="input-field px-4 py-2 text-3xl" />
+                                </td>
+                            </tr>
+                            <tr class="info-block">
+                                <td class="info-title px-4 py-2">Конец регистрации:</td>
+                                <td class="info-content px-4 py-2 text-3xl">
+                                    <span *ngIf="!isEditing">{{ registrationEnd }}</span>
+                                    <input *ngIf="isEditing" type="date" [(ngModel)]="registrationEndUpdate" name="registrationEndUpdate" class="input-field px-4 py-2 text-3xl" />
+                                </td>
+                            </tr>
+                            <tr class="info-block">
+                                <td class="info-title px-4 py-2">Кандидатов допущено :</td>
+                                <td class="info-content px-4 py-2 text-3xl">
+                                    <span *ngIf="!isEditing">{{ persons }}</span>
+                                    <input *ngIf="isEditing" [(ngModel)]="personsUpdate" (ngModelChange)="checkPersons()" name="personsUpdate" class="input-field px-4 py-2 text-3xl" type="number" pattern="[0-9]*" />
+                                </td>
+                            </tr>
+                            <tr class="info-block">
+                                <td class="info-title px-4 py-2">Начало выборов:</td>
+                                <td class="info-content px-4 py-2 text-3xl">
+                                    <span *ngIf="!isEditing">{{ choiceStart }}</span>
+                                    <input *ngIf="isEditing" type="date" [(ngModel)]="choiceStartUpdate" name="choiceStartUpdate" class="input-field px-4 py-2 text-3xl" />
+                                </td>
+                            </tr>
+                            <tr class="info-block">
+                                <td class="info-title px-4 py-2">Конец выборов:</td>
+                                <td class="info-content px-4 py-2 text-3xl">
+                                    <span *ngIf="!isEditing">{{ choiceEnd }}</span>
+                                    <input *ngIf="isEditing" type="date" [(ngModel)]="choiceEndUpdate" name="choiceEndUpdate" class="input-field px-4 py-2 text-3xl" />
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="button-group mt-8">
+                            <button type="button" class="btn-delete" (click)="onDelete(eventId)">Удалить</button>
+                            <button type="button" class="btn-edit" *ngIf="!isEditing" (click)="onEdit()">Изменить</button>
+                            <button type="button" class="btn-save" *ngIf="isEditing" (click)="onSave(eventId)">Сохранить</button>
+                            <button type="button" class="btn-cancel" *ngIf="isEditing" (click)="onCancel()">Отмена</button>
+                        </div>
+                    </form>
+
+
+                </div>
             </ng-container>
             <ng-template #isAdmin>
                 <!-- Форма для админа -->
@@ -103,8 +79,8 @@
                             class="space-y-3"
                             [formGroup]="adminRegEventForm">
                         <div class="mb-6">
-                            <div class="text-2xl font-bold tracking-tight">Submit your request</div>
-                            <div class="text-secondary">Your request will be processed and our support staff will get back to you in 24 hours.</div>
+                            <div class="text-2xl font-bold tracking-tight">Форма заполнения</div>
+                            <div class="text-secondary">Введите все необходимые данные для создания выборов</div>
                         </div>
                         <mat-form-field class="w-120">
                             <input matInput type="date" [formControlName]="'dateRegStart'" required>
@@ -162,9 +138,8 @@
                                 class="fuse-mat-button-large w-full mt-6"
                                 mat-flat-button
                                 [color]="'primary'"
-                                [disabled]="adminRegEventForm.disabled"
-                                (click)="onSignUp()">
-                        <span *ngIf="!adminRegEventForm.disabled">
+                                (click)="createEvent()">
+                        <span >
                             Сохранить
                         </span>
                             <mat-progress-spinner
@@ -182,6 +157,83 @@
                     <!-- Ваш код формы для не-кандидата здесь -->
                 </div>
             </ng-template>
+        </div>
+
+
+            <div *ngIf="this.userRole == 'candidate'" class="form-container">
+
+                <div *ngIf="!this.eventExist">
+                    <div class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+                    <h1 class="styled-header"> Нет активных мероприятий</h1>
+                </div>
+                </div>
+
+                <div *ngIf="this.eventExist">
+                <div class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+                    <!-- user-form.component.html -->
+                    <form class="space-y-3" [formGroup]="userForm">
+                        <div class="mb-6">
+                            <div class="text-2xl font-bold tracking-tight">Форма заполнения</div>
+                            <div class="text-secondary">Введите все необходимые данные</div>
+                        </div>
+
+                        <div class="custom-file-input mb-4">
+                            <label for="photo">Фотография</label>
+                            <input type="file" id="photo" formControlName="photo" required>
+                            <mat-error *ngIf="userForm.get('photo').hasError('required')">Required</mat-error>
+                        </div>
+
+                        <mat-form-field class="w-120">
+                            <mat-label>О себе</mat-label>
+                            <textarea matInput formControlName="about" required></textarea>
+                            <mat-error *ngIf="userForm.get('about').hasError('required')">Required</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="w-120">
+                            <mat-label>GPA</mat-label>
+                            <input matInput type="text" formControlName="gpa" required>
+                            <mat-error *ngIf="userForm.get('gpa').hasError('required') || userForm.get('gpa').hasError('pattern')">
+                                Required and must be a number between 0.00 and 4.00
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="w-120">
+                            <mat-label>Награды</mat-label>
+                            <textarea matInput formControlName="awards" required></textarea>
+                            <mat-error *ngIf="userForm.get('awards').hasError('required')">Required</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="w-120">
+                            <mat-label>Клубы</mat-label>
+                            <input matInput type="text" formControlName="clubs" required>
+                            <mat-error *ngIf="userForm.get('clubs').hasError('required')">Required</mat-error>
+                        </mat-form-field>
+
+                        <!-- Submit button -->
+                        <button
+                                class="fuse-mat-button-large w-full mt-6"
+                                mat-flat-button
+                                [color]="'primary'"
+                                (click)="saveCandidateForm()">
+                        <span >
+                            Сохранить
+                        </span>
+                            <mat-progress-spinner
+                                    *ngIf="userForm.disabled"
+                                    [diameter]="24"
+                                    [mode]="'indeterminate'">
+                            </mat-progress-spinner>
+                        </button>
+                    </form>
+
+                    <!-- Ваш код формы для не-кандидата здесь -->
+                </div>
+
+            </div>
+            </div>
+
+
+
         </div>
     </div>
 </div>

@@ -1,18 +1,25 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
-import { ApexOptions } from 'ng-apexcharts';
-import { AnalyticsService } from 'app/modules/admin/dashboards/analytics/analytics.service';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {Observable, Subject, takeUntil} from "rxjs";
+import {Router} from "@angular/router";
+import {AnalyticsService} from "../dashboards/analytics/analytics.service";
+import {ApexOptions} from "ng-apexcharts";
+import {AcademyService} from "../apps/academy/academy.service";
 
 @Component({
-    selector       : 'analytics',
-    templateUrl    : './analytics.component.html',
-    styleUrls: ['./analytics.component.scss'],
-    encapsulation  : ViewEncapsulation.None,
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AnalyticsComponent implements OnInit, OnDestroy
-{
+export class HomeComponent implements OnInit, OnDestroy {
+    data: any;
+    selectedProject: string = 'ACME Corp. Backend App';
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
+
+    stats$: Observable<any>;
+
+    mp = new Map();
     chartVisitors: ApexOptions;
     chartConversions: ApexOptions;
     chartImpressions: ApexOptions;
@@ -22,20 +29,21 @@ export class AnalyticsComponent implements OnInit, OnDestroy
     chartGender: ApexOptions;
     chartAge: ApexOptions;
     chartLanguage: ApexOptions;
-    data: any;
-    statistic:any;
+    currentUserVote: any;
 
-    private _unsubscribeAll: Subject<any> = new Subject<any>();
-     female: any;
+    statistic: any;
+
+
+    female: any;
 
     /**
      * Constructor
      */
     constructor(
         private _analyticsService: AnalyticsService,
+        private _academyService: AcademyService,
         private _router: Router
-    )
-    {
+    ) {
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -45,12 +53,13 @@ export class AnalyticsComponent implements OnInit, OnDestroy
     /**
      * On init
      */
-    ngOnInit(): void
-    {
+    ngOnInit(): void {
+
+
         this._analyticsService.getStatistics()
             .subscribe(statistic => {
                 this.statistic = statistic;
-                console.log('statistic',statistic)
+                console.log('statistic', statistic)
                 this.female = statistic.female;
 
             });
@@ -85,8 +94,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy
     /**
      * On destroy
      */
-    ngOnDestroy(): void
-    {
+    ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
@@ -102,8 +110,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy
      * @param index
      * @param item
      */
-    trackByFn(index: number, item: any): any
-    {
+    trackByFn(index: number, item: any): any {
         return item.id || index;
     }
 
@@ -111,18 +118,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy
     // @ Private methods
     // -----------------------------------------------------------------------------------------------------
 
-    /**
-     * Fix the SVG fill references. This fix must be applied to all ApexCharts
-     * charts in order to fix 'black color on gradient fills on certain browsers'
-     * issue caused by the '<base>' tag.
-     *
-     * Fix based on https://gist.github.com/Kamshak/c84cdc175209d1a30f711abd6a81d472
-     *
-     * @param element
-     * @private
-     */
-    private _fixSvgFill(element: Element): void
-    {
+    private _fixSvgFill(element: Element): void {
         // Current URL
         const currentURL = this._router.url;
 
@@ -130,16 +126,33 @@ export class AnalyticsComponent implements OnInit, OnDestroy
         // 2. Filter out the ones that doesn't have cross reference so we only left with the ones that use the 'url(#id)' syntax
         // 3. Insert the 'currentURL' at the front of the 'fill' attribute value
         Array.from(element.querySelectorAll('*[fill]'))
-             .filter(el => el.getAttribute('fill').indexOf('url(') !== -1)
-             .forEach((el) => {
-                 const attrVal = el.getAttribute('fill');
-                 el.setAttribute('fill', `url(${currentURL}${attrVal.slice(attrVal.indexOf('#'))}`);
-             });
+            .filter(el => el.getAttribute('fill').indexOf('url(') !== -1)
+            .forEach((el) => {
+                const attrVal = el.getAttribute('fill');
+                el.setAttribute('fill', `url(${currentURL}${attrVal.slice(attrVal.indexOf('#'))}`);
+            });
     }
 
-    /**
-     * Prepare the chart data from the data
-     *
-     * @private
-     */
+    attachFile(files: FileList) {
+        console.log(files.item(0));
+        const formData: FormData = new FormData();
+        formData.append('file', files.item(0));
+    }
+
+    navigate1() {
+        this._router.navigateByUrl(`/apps/academy`);
+    }
+
+    navigate2() {
+        this._router.navigateByUrl(`/dashboards/analytics`);
+    }
+
+    navigate3() {
+        this._router.navigateByUrl(`/dashboards/finance`);
+    }
+
+    navigate4() {
+        this._router.navigateByUrl(`/pages/settings`);
+    }
+
 }

@@ -12,13 +12,7 @@ import {EditUserComponent} from "./modules/admin/pages/edit-user.component/edit-
 export const appRoutes: Route[] = [
 
     // Redirect empty path to '/dashboards/project'
-    {path: '', pathMatch : 'full', redirectTo: '/main'},
-
-    // Redirect signed in user to the '/dashboards/project'
-    //
-    // After the user signs in, the sign in page will redirect the user to the 'signed-in-redirect'
-    // path. Below is another redirection for that path to redirect the user to the desired
-    // location. This is a small convenience to keep all main routes together here on this file.
+    {path: '', pathMatch : 'full', redirectTo: '/home'},
     {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'main'},
 
     // Auth routes for guests
@@ -55,16 +49,16 @@ export const appRoutes: Route[] = [
     },
 
     // Landing routes
-    {
-        path: '',
-        component  : LayoutComponent,
-        data: {
-            layout: 'empty'
-        },
-        children   : [
-            {path: 'home', loadChildren: () => import('app/modules/landing/home/home.module').then(m => m.LandingHomeModule)},
-        ]
-    },
+    // {
+    //     path: '',
+    //     component  : LayoutComponent,
+    //     data: {
+    //         layout: 'empty'
+    //     },
+    //     children   : [
+    //         {path: 'home', loadChildren: () => import('app/modules/landing/home/home.module').then(m => m.LandingHomeModule)},
+    //     ]
+    // },
 
     // Admin routes
     {
@@ -79,6 +73,7 @@ export const appRoutes: Route[] = [
 
             // Main
             {path: 'main', loadChildren: () => import('app/modules/admin/main/main.module').then(m => m.MainModule)},
+            {path: 'home', loadChildren: () => import('app/modules/admin/home/home.module').then(m => m.HomeModule)},
 
             // Dashboards
             {path: 'dashboards', children: [

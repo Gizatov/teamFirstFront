@@ -1,0 +1,38 @@
+/* Стили для карточек */
+.bg-card {
+  background-color: #FFFFFF; /* Цвет фона */
+  border-radius: 20px; /* Радиус скругления */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Тень */
+  transition: transform 0.3s, box-shadow 0.3s; /* Плавное изменение при наведении */
+}
+
+.bg-card:hover {
+  transform: translateY(-5px); /* Небольшое поднятие при наведении */
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2); /* Увеличение тени при наведении */
+}
+
+/* Стили для текста внутри карточек */
+.text-secondary {
+  color: #666666; /* Цвет вторичного текста */
+}
+
+/* Стили для кнопок */
+button {
+  cursor: pointer; /* Изменение курсора при наведении на кнопку */
+  background-color: #4CAF50; /* Цвет фона кнопки */
+  color: white; /* Цвет текста кнопки */
+  padding: 10px 20px; /* Отступы */
+  border: none; /* Убираем границу */
+  border-radius: 5px; /* Радиус скругления */
+  transition: background-color 0.3s; /* Плавное изменение цвета при наведении */
+}
+
+button:hover {
+  background-color: #45a049; /* Изменение цвета фона при наведении */
+}
+
+/* Стили для иконок */
+.icon-size-5 {
+  font-size: 20px; /* Размер иконки */
+}
+

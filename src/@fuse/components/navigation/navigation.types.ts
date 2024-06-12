@@ -12,10 +12,11 @@ export interface FuseNavigationItem
         | 'divider'
         | 'group'
         | 'spacer';
-    hidden?: (item: FuseNavigationItem) => boolean;
+    hidden?: boolean;
     active?: boolean;
     disabled?: boolean;
     tooltip?: string;
+    role?: string;
     link?: string;
     fragment?: string;
     preserveFragment?: boolean;

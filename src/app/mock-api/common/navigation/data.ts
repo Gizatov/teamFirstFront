@@ -7,7 +7,15 @@ export const defaultNavigation: FuseNavigationItem[] = [
         title   : 'Управление пользователями',
         type    : 'basic',
         icon    : 'heroicons_outline:users',
-        link: '/main'
+        link: '/main',
+        role    : 'admin',
+    },
+    {
+        id      : 'home',
+        title   : 'Главная страница',
+        type    : 'basic',
+        icon    : 'heroicons_outline:home',
+        link    : '/home',
     },
             {
                 id   : 'dashboards.analytics',

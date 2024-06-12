@@ -10,8 +10,9 @@ export class AuthService
 {
     private _authenticated: boolean = false;
     private register = 'https://sduelection.kz/auth/register';
-    private auth = 'https://sduelection.kz/auth/authenticate';
+    private auth = 'https://sduelection.kz/authenticate';
     private getById = 'https://sduelection.kz/users/';
+
 
 
 
@@ -179,6 +180,24 @@ export class AuthService
     signUp(user: { name: string; lastName: string; email: string; password: string; studentId: string;faculty: string; gender: string, course: string, role: { id: string } }): Observable<any> {
         console.log('this._httpClient.post(this.url, user)', this._httpClient.post(this.register, user));
         return this._httpClient.post(this.register, user);
+    }
+
+
+    createEvents(eventData: any): Observable<any> {
+        return this._httpClient.post(`${this.getById}createEvents`, eventData);
+    }
+    saveCandidateForm(candidateData: any): Observable<any> {
+        return this._httpClient.post(`${this.getById}save-candidate-file`, candidateData);
+    }
+    updateEvents(eventData: any): Observable<any> {
+        return this._httpClient.put(`${this.getById}updateEvents`, eventData);
+    }
+    deleteEvent(id: string): Observable<any>{
+        let number = id
+        return this._httpClient.delete(`${this.getById}deleteEvent/${id}`)
+    }
+    getAllEvent(): Observable<any>{
+        return this._httpClient.get(`${this.getById}getEvent`)
     }
 
 

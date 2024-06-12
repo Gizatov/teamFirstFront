@@ -55,13 +55,13 @@ export const shortcuts = [
         icon       : 'heroicons_outline:user-group',
         link       : '/apps/contacts',
         useRouter  : true
-    },
-    {
-        id         : '0a240ab8-e19d-4503-bf68-20013030d526',
-        label      : 'Reload',
-        description: 'Reload the app',
-        icon       : 'heroicons_outline:refresh',
-        link       : '/dashboards/project',
-        useRouter  : false
     }
+    // {
+    //     id         : '0a240ab8-e19d-4503-bf68-20013030d526',
+    //     label      : 'Reload',
+    //     description: 'Reload the app',
+    //     icon       : 'heroicons_outline:refresh',
+    //     link       : '/dashboards/project',
+    //     useRouter  : false
+    // }
 ];

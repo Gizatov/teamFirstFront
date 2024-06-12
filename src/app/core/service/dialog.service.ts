@@ -24,7 +24,7 @@ export class DialogService {
     }
     openCandidateInfoModal(): void {
         this.dialog.open(CandidateInfoComponent, {
-            width: '600px', // Установите размер модального окна по вашему усмотрению
+            width: '800px', // Установите размер модального окна по вашему усмотрению
         });
     }
 }

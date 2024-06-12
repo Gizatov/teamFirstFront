@@ -1,6 +1,6 @@
 {
   "/sdu-gateway": {
-    "target": "http://localhost:8070/",
+    "target": "https://sduelection.kz/",
     "secure": "false",
     "timeout": 36000000,
     "changeOrigin": true

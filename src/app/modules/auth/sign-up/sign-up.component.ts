@@ -6,6 +6,7 @@ import { FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
 import {Observable} from "rxjs";
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 
 @Component({
@@ -46,13 +47,28 @@ export class AuthSignUpComponent implements OnInit {
      * On init
      */
     ngOnInit(): void {
+        function specificEmailValidator(): ValidatorFn {
+            return (control: AbstractControl): ValidationErrors | null => {
+                const emailPattern = /^[0-9]{9}@stu\.sdu\.edu\.kz$/;
+                const valid = emailPattern.test(control.value);
+                return valid ? null : { specificEmail: true };
+            };
+        }
+
+         function specificStudentIdValidator(): ValidatorFn {
+            return (control: AbstractControl): ValidationErrors | null => {
+                const studentIdPattern = /^2[0-9]{8}$/; // Начинается с 2 и имеет длину в 9 цифр
+                const valid = studentIdPattern.test(control.value);
+                return valid ? null : { specificStudentId: true };
+            };
+        }
         // Create the form
         this.signUpForm = this._formBuilder.group({
             name: ['', Validators.required],
             lastName: ['', Validators.required],
-            email: ['', [Validators.required, Validators.email]],
+            email: ['', [Validators.required, Validators.email, specificEmailValidator()]],
             password: ['', Validators.required],
-            studentId: ['', Validators.required],
+            studentId: ['', [Validators.required, specificStudentIdValidator()]],
             faculty: ['', Validators.required],
             gender: [''],
             course: ['', Validators.required],
@@ -86,21 +102,30 @@ export class AuthSignUpComponent implements OnInit {
                 }
             };
 
-            this._authService.signUp(request).subscribe(res => {
-                this.registrationResponse$ = res;
-                console.log('res',res.status)
-                if (res.token) {
-                    this._snackBar.open('Регистрация прошла успешно', 'OK', {
-                        duration: 3000,
-                    });
-
-                    this.router.navigate(['/sign-in']);
+            this._authService.signUp(request).subscribe(
+                res => {
+                    this.registrationResponse$ = res;
+                    if (res.token) {
+                        this._snackBar.open('Регистрация прошла успешно', 'OK', {
+                            duration: 3000,
+                        });
+                        this.router.navigate(['/sign-in']);
+                    }
+                },
+                error => {
+                    if (error.status === 401) {
+                        this._snackBar.open('Пользователь с такой почтой уже сущестует!', 'OK', {
+                            duration: 3000,
+                        });
+                    } else {
+                        this._snackBar.open('Произошла ошибка, попробуйте снова', 'OK', {
+                            duration: 3000,
+                        });
+                    }
                 }
-            });
+            );
         }
     }
-
-
 
 
 

@@ -4,3 +4,101 @@
   --mat-slider-thumb-size: 52px !important; /* Размер ползунка */
   --mat-slider-track-height: 34px !important; /* Высота дорожки */
 }
+/* your-component.component.css */
+
+.bg-card {
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.info-block {
+  margin-bottom: 20px;
+}
+
+.info-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.info-content {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #666;
+}
+
+.info-list {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.info-list li {
+  font-size: 1.25rem;
+  color: #666;
+}
+.text-center {
+  text-align: center;
+}
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.btn-delete, .btn-edit, .btn-cancel , .btn-save{
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-delete {
+  background-color: #e3342f;
+  color: #fff;
+}
+
+.btn-delete:hover {
+  background-color: #cc1f1a;
+}
+
+.btn-edit {
+  background-color: #3490dc;
+  color: #fff;
+}
+
+.btn-edit:hover {
+  background-color: #2779bd;
+}
+
+.btn-cancel {
+  background-color: #3490dc;
+  color: #fff;
+}
+
+.btn-cancel:hover {
+  background-color: #2779bd;
+}
+
+.btn-save {
+  background-color: #19c503;
+  color: #fff;
+}
+.styled-header {
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 5rem;
+  margin-bottom: 2rem;
+  color: #333; /* Цвет текста заголовка */
+  /* Другие желаемые стили */
+}
+
+
+
+
+
+

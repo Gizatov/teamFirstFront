@@ -1,4 +1,5 @@
 <div class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto" cdkScrollable>
+<!--    <img src="assets/images/logo/sdu.jpg" style="position: absolute; top: 0; bottom: 100px; left: 0; width: 100%; height: 900px; z-index: -1; filter: brightness(0.7);">-->
 
     <!-- Header -->
     <div class="relative flex-0 py-8 px-4 sm:p-16 overflow-hidden bg-gray-800 dark">
@@ -25,11 +26,18 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 sm:mt-10">
                     <ng-container *ngFor="let d of dataSource; trackBy: trackByFn">
                         <!-- Course -->
-                        <div class="flex flex-col h-96 shadow-lg rounded-2xl overflow-hidden bg-white dark:bg-gray-800">
+                        <div class="flex flex-col h-auto shadow-lg rounded-2xl overflow-hidden bg-white dark:bg-gray-800">
                             <div class="flex flex-col p-6">
                                 <!-- Course title & description -->
+
+                                <div class="flex items-center justify-center mb-4">
+                                    <img src="assets/images/logo/face.jpg" alt="Photo" class="w-44 h-44 rounded-full object-cover border-2 border-blue-500 dark:border-blue-700">
+
+                                </div>
+
                                 <div class="mt-4 text-xl font-semibold text-gray-900 dark:text-gray-100">ФИО: {{ d.name }} {{ d.lastName }}</div>
-                                <div class="mt-4 text-xl font-semibold text-gray-900 dark:text-gray-300">КУРС: {{ d.faculty }}</div>
+                                <div class="mt-4 text-xl font-semibold text-gray-900 dark:text-gray-300">ФАКУЛЬТЕТ: Инженерии и естественных наук</div>
+                                <div class="mt-4 text-xl font-semibold text-gray-900 dark:text-gray-300">КУРС: {{ d.course }}</div>
                             </div>
                             <!-- Footer -->
                             <div class="flex flex-col w-full mt-auto">
@@ -58,6 +66,11 @@
                     </ng-container>
                 </div>
             </ng-container>
+            <div *ngIf="noCandidate">
+                <div class="z-10 relative flex flex-col items-center">
+                    <h1 class="text-3xl font-bold text-black">Нет активных кандидатов</h1>
+                </div>
+            </div>
 
         </div>
 

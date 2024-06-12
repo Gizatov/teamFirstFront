@@ -71,7 +71,11 @@
                     <mat-error *ngIf="signUpForm.get('email').hasError('email')">
                         Please enter a valid email address
                     </mat-error>
+                    <mat-error *ngIf="signUpForm.get('email').hasError('specificEmail')">
+                        Please enter a valid email address in the format: xxxxxxxxx@stu.sdu.edu.kz
+                    </mat-error>
                 </mat-form-field>
+
                 <!-- Password field -->
                 <mat-form-field class="w-full">
                     <mat-label>Password</mat-label>
@@ -106,8 +110,8 @@
                             id="studentId"
                             matInput
                             [formControlName]="'studentId'"> <!-- Заменено на 'lastName' -->
-                    <mat-error *ngIf="signUpForm.get('studentId').hasError('required')">
-                        Full studentId is required
+                    <mat-error *ngIf="signUpForm.get('studentId').hasError('specificStudentId')">
+                        Введите валидный id
                     </mat-error>
                 </mat-form-field>
 
