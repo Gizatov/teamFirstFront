@@ -10,7 +10,7 @@ export class AuthService
 {
     private _authenticated: boolean = false;
     private register = 'https://sduelection.kz/auth/register';
-    private auth = 'https://sduelection.kz/authenticate';
+    private auth = 'https://sduelection.kz/auth/authenticate';
     private getById = 'https://sduelection.kz/users/';
 
 
